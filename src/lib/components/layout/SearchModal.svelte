@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { toast } from 'svelte-sonner';
-	import { getContext, onMount } from 'svelte';
-	const i18n = getContext('i18n');
+ import { toast } from 'svelte-sonner';
+ import { getContext, onMount } from 'svelte';
+ import { base } from '$app/paths';
+ const i18n = getContext('i18n');
 
 	import Modal from '$lib/components/common/Modal.svelte';
 	import SearchInput from './Sidebar/SearchInput.svelte';
@@ -158,7 +159,7 @@
 						idx
 							? 'bg-gray-50 dark:bg-gray-850'
 							: ''}"
-						href="/c/{chat.id}"
+						href="{`${base}/c/${chat.id}`}"
 						draggable="false"
 						data-arrow-selected={selectedIdx === idx ? 'true' : undefined}
 						on:mouseenter={() => {

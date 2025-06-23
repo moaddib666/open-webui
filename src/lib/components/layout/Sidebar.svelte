@@ -3,6 +3,7 @@
 	import { v4 as uuidv4 } from 'uuid';
 
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 	import {
 		user,
 		chats,
@@ -486,7 +487,7 @@
 			<a
 				id="sidebar-new-chat-button"
 				class="flex justify-between items-center flex-1 rounded-lg px-2 py-1 h-full text-right hover:bg-gray-100 dark:hover:bg-gray-900 transition no-drag-region"
-				href="/"
+				href="{base}/"
 				draggable="false"
 				on:click={async () => {
 					selectedChatId = null;
@@ -523,7 +524,7 @@
 			<div class="px-1.5 flex justify-center text-gray-800 dark:text-gray-200">
 				<a
 					class="grow flex items-center space-x-3 rounded-lg px-2 py-[7px] hover:bg-gray-100 dark:hover:bg-gray-900 transition"
-					href="/home"
+					href="{base}/home"
 					on:click={() => {
 						selectedChatId = null;
 						chatId.set('');
@@ -567,7 +568,7 @@
 			<div class="px-1.5 flex justify-center text-gray-800 dark:text-gray-200">
 				<a
 					class="grow flex items-center space-x-3 rounded-lg px-2 py-[7px] hover:bg-gray-100 dark:hover:bg-gray-900 transition"
-					href="/notes"
+					href="{base}/notes"
 					on:click={() => {
 						selectedChatId = null;
 						chatId.set('');
@@ -609,7 +610,7 @@
 			<div class="px-1.5 flex justify-center text-gray-800 dark:text-gray-200">
 				<a
 					class="grow flex items-center space-x-3 rounded-lg px-2 py-[7px] hover:bg-gray-100 dark:hover:bg-gray-900 transition"
-					href="/workspace"
+					href="{base}/workspace"
 					on:click={() => {
 						selectedChatId = null;
 						chatId.set('');
@@ -653,7 +654,7 @@
 							<div class="px-1.5 flex justify-center text-gray-800 dark:text-gray-200">
 								<a
 									class="grow flex items-center space-x-2.5 rounded-lg px-2 py-[7px] hover:bg-gray-100 dark:hover:bg-gray-900 transition"
-									href="/?model={modelId}"
+									href="{base}/?model={modelId}"
 									on:click={() => {
 										selectedChatId = null;
 										chatId.set('');
@@ -667,7 +668,7 @@
 									<div class="self-center shrink-0">
 										<img
 											crossorigin="anonymous"
-											src={model?.info?.meta?.profile_image_url ?? '/static/favicon.png'}
+											src={model?.info?.meta?.profile_image_url ?? `${base}/static/favicon.png`}
 											class=" size-5 rounded-full -translate-x-[0.5px]"
 											alt="logo"
 										/>

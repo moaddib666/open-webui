@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { getContext, onMount } from 'svelte';
-	import { models, config } from '$lib/stores';
+ import { getContext, onMount } from 'svelte';
+ import { models, config } from '$lib/stores';
+ import { base } from '$app/paths';
 
 	import { toast } from 'svelte-sonner';
 	import { deleteSharedChatById, getChatById, shareChatById } from '$lib/apis/chats';
@@ -107,7 +108,7 @@
 			<div class="px-5 pt-4 pb-5 w-full flex flex-col justify-center">
 				<div class=" text-sm dark:text-gray-300 mb-1">
 					{#if chat.share_id}
-						<a href="/s/{chat.share_id}" target="_blank"
+						<a href="{`${base}/s/${chat.share_id}`}" target="_blank"
 							>{$i18n.t('You have shared this chat')}
 							<span class=" underline">{$i18n.t('before')}</span>.</a
 						>

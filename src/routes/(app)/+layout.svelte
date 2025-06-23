@@ -6,8 +6,9 @@
 	const { saveAs } = fileSaver;
 	import mermaid from 'mermaid';
 
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+ import { goto } from '$app/navigation';
+ import { page } from '$app/stores';
+ import { base } from '$app/paths';
 	import { fade } from 'svelte/transition';
 
 	import { getKnowledgeBases } from '$lib/apis/knowledge';
@@ -58,7 +59,7 @@
 
 	onMount(async () => {
 		if ($user === undefined || $user === null) {
-			await goto('/auth');
+			await goto(`${base}/auth`);
 		} else if (['user', 'admin'].includes($user?.role)) {
 			try {
 				// Check if IndexedDB exists
@@ -201,7 +202,7 @@
 					event.preventDefault();
 					console.log('temporaryChat');
 					temporaryChatEnabled.set(!$temporaryChatEnabled);
-					await goto('/');
+					await goto(`${base}/`);
 					const newChatButton = document.getElementById('new-chat-button');
 					setTimeout(() => {
 						newChatButton?.click();

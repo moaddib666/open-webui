@@ -17,6 +17,10 @@ const config = {
 			assets: 'build',
 			fallback: 'index.html'
 		}),
+		// Support for serving the app on a subpath
+		paths: {
+			base: process.env.SITE_BASE_PATH || ''
+		},
 		// poll for new version name every 60 seconds (to trigger reload mechanic in +layout.svelte)
 		version: {
 			name: (() => {

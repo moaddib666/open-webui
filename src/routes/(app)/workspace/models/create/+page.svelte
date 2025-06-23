@@ -1,8 +1,9 @@
 <script>
 	import { v4 as uuidv4 } from 'uuid';
 	import { toast } from 'svelte-sonner';
-	import { goto } from '$app/navigation';
-	import { config, models, settings } from '$lib/stores';
+ import { goto } from '$app/navigation';
+ import { base } from '$app/paths';
+ import { config, models, settings } from '$lib/stores';
 
 	import { onMount, tick, getContext } from 'svelte';
 	import { createNewModel, getModelById } from '$lib/apis/models';
@@ -49,7 +50,7 @@
 					)
 				);
 				toast.success($i18n.t('Model created successfully!'));
-				await goto('/workspace/models');
+				await goto(`${base}/workspace/models`);
 			}
 		}
 	};

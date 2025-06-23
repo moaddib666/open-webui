@@ -3,8 +3,9 @@
 	import { createEventDispatcher, getContext, onMount } from 'svelte';
 
 	import { flyAndScale } from '$lib/utils/transitions';
-	import { goto } from '$app/navigation';
-	import { fade, slide } from 'svelte/transition';
+ import { goto } from '$app/navigation';
+ import { base } from '$app/paths';
+ import { fade, slide } from 'svelte/transition';
 
 	import { getUsage } from '$lib/apis';
 	import { userSignOut } from '$lib/apis/auths';
@@ -110,7 +111,7 @@
 				<button
 					class="flex rounded-md py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition"
 					on:click={() => {
-						goto('/playground');
+						goto(`${base}/playground`);
 						show = false;
 
 						if ($mobile) {
@@ -127,7 +128,7 @@
 				<button
 					class="flex rounded-md py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition"
 					on:click={() => {
-						goto('/admin');
+						goto(`${base}/admin`);
 						show = false;
 
 						if ($mobile) {
@@ -193,7 +194,7 @@
 					user.set(null);
 					localStorage.removeItem('token');
 
-					location.href = res?.redirect_url ?? '/auth';
+					location.href = res?.redirect_url ?? `${base}/auth`;
 					show = false;
 				}}
 			>

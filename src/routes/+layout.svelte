@@ -27,8 +27,9 @@
 		toolServers,
 		playingNotificationSound
 	} from '$lib/stores';
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+ import { goto } from '$app/navigation';
+ import { page } from '$app/stores';
+ import { base } from '$app/paths';
 	import { Toaster, toast } from 'svelte-sonner';
 
 	import { executeToolServer, getBackendConfig } from '$lib/apis';
@@ -67,12 +68,13 @@
 	const BREAKPOINT = 768;
 
 	const setupSocket = async (enableWebsocket) => {
-		const _socket = io(`${WEBUI_BASE_URL}` || undefined, {
+		const _url = WEBUI_BASE_URL.endsWith(base) ? WEBUI_BASE_URL.slice(0, -base.length) : WEBUI_BASE_URL;
+		const _socket = io(_url, {
 			reconnection: true,
 			reconnectionDelay: 1000,
 			reconnectionDelayMax: 5000,
 			randomizationFactor: 0.5,
-			path: '/ws/socket.io',
+			path: `${base}/ws/socket.io`,
 			transports: enableWebsocket ? ['websocket'] : ['polling', 'websocket'],
 			auth: { token: localStorage.token }
 		});
@@ -259,15 +261,15 @@
 				const { done, content, title } = data;
 
 				if (done) {
-					if ($settings?.notificationSoundAlways ?? false) {
-						playingNotificationSound.set(true);
+ 				if ($settings?.notificationSoundAlways ?? false) {
+ 					playingNotificationSound.set(true);
 
-						const audio = new Audio(`/audio/notification.mp3`);
-						audio.play().finally(() => {
-							// Ensure the global state is reset after the sound finishes
-							playingNotificationSound.set(false);
-						});
-					}
+ 					const audio = new Audio(`${base}/audio/notification.mp3`);
+ 					audio.play().finally(() => {
+ 						// Ensure the global state is reset after the sound finishes
+ 						playingNotificationSound.set(false);
+ 					});
+ 				}
 
 					if ($isLastActiveTab) {
 						if ($settings?.notificationEnabled ?? false) {
@@ -281,7 +283,7 @@
 					toast.custom(NotificationToast, {
 						componentProps: {
 							onClick: () => {
-								goto(`/c/${event.chat_id}`);
+								goto(`${base}/c/${event.chat_id}`);
 							},
 							content: content,
 							title: title
@@ -430,7 +432,7 @@
 				toast.custom(NotificationToast, {
 					componentProps: {
 						onClick: () => {
-							goto(`/channels/${event.channel_id}`);
+							goto(`${base}/channels/${event.channel_id}`);
 						},
 						content: data?.content,
 						title: event?.channel?.name
@@ -457,7 +459,7 @@
 			user.set(null);
 			localStorage.removeItem('token');
 
-			location.href = res?.redirect_url ?? '/auth';
+				location.href = res?.redirect_url ?? `${base}/auth`;
 		}
 	};
 
@@ -590,19 +592,19 @@
 					} else {
 						// Redirect Invalid Session User to /auth Page
 						localStorage.removeItem('token');
-						await goto(`/auth?redirect=${encodedUrl}`);
+						await goto(`${base}/auth?redirect=${encodedUrl}`);
 					}
 				} else {
 					// Don't redirect if we're already on the auth page
 					// Needed because we pass in tokens from OAuth logins via URL fragments
-					if ($page.url.pathname !== '/auth') {
-						await goto(`/auth?redirect=${encodedUrl}`);
+					if ($page.url.pathname !== `${base}/auth`) {
+						await goto(`${base}/auth?redirect=${encodedUrl}`);
 					}
 				}
 			}
 		} else {
 			// Redirect to /error when Backend Not Detected
-			await goto(`/error`);
+			await goto(`${base}/error`);
 		}
 
 		await tick();
@@ -623,7 +625,7 @@
 
 			document.getElementById('splash-screen')?.remove();
 
-			const audio = new Audio(`/audio/greeting.mp3`);
+			const audio = new Audio(`${base}/audio/greeting.mp3`);
 			const playAudio = () => {
 				audio.play();
 				document.removeEventListener('click', playAudio);
@@ -645,12 +647,12 @@
 
 <svelte:head>
 	<title>{$WEBUI_NAME}</title>
-	<link crossorigin="anonymous" rel="icon" href="{WEBUI_BASE_URL}/static/favicon.png" />
+	<link crossorigin="anonymous" rel="icon" href="{WEBUI_BASE_URL}${base}/static/favicon.png" />
 
 	<!-- rosepine themes have been disabled as it's not up to date with our latest version. -->
 	<!-- feel free to make a PR to fix if anyone wants to see it return -->
-	<!-- <link rel="stylesheet" type="text/css" href="/themes/rosepine.css" />
-	<link rel="stylesheet" type="text/css" href="/themes/rosepine-dawn.css" /> -->
+	<!-- <link rel="stylesheet" type="text/css" href="{base}/themes/rosepine.css" />
+	<link rel="stylesheet" type="text/css" href="{base}/themes/rosepine-dawn.css" /> -->
 </svelte:head>
 
 {#if loaded}

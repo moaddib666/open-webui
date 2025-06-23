@@ -14,6 +14,7 @@
 
 	import { config, models, settings, showSidebar } from '$lib/stores';
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	import { compressImage, copyToClipboard, splitStream } from '$lib/utils';
 	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
@@ -117,7 +118,7 @@
 			note = res;
 			files = res.data.files || [];
 		} else {
-			goto('/');
+			goto(`${base}/`);
 			return;
 		}
 
@@ -466,7 +467,7 @@
 
 		if (res) {
 			toast.success($i18n.t('Note deleted successfully'));
-			goto('/notes');
+			goto(`${base}/notes`);
 		} else {
 			toast.error($i18n.t('Failed to delete note'));
 		}

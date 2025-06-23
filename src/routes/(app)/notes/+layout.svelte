@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onMount, getContext } from 'svelte';
 	import { WEBUI_NAME, showSidebar, functions, config, user, showArchivedChats } from '$lib/stores';
-	import { goto } from '$app/navigation';
+ import { goto } from '$app/navigation';
+ import { base } from '$app/paths';
 
 	import MenuLines from '$lib/components/icons/MenuLines.svelte';
 	import UserMenu from '$lib/components/layout/Sidebar/UserMenu.svelte';
@@ -18,7 +19,7 @@
 			)
 		) {
 			// If the feature is not enabled, redirect to the home page
-			goto('/');
+			goto(`${base}/`);
 		}
 
 		loaded = true;
@@ -59,7 +60,7 @@
 						<div
 							class="flex gap-1 scrollbar-none overflow-x-auto w-fit text-center text-sm font-medium bg-transparent py-1 touch-auto pointer-events-auto"
 						>
-							<a class="min-w-fit transition" href="/notes">
+							<a class="min-w-fit transition" href="{base}/notes">
 								{$i18n.t('Notes')}
 							</a>
 						</div>

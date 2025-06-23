@@ -3,8 +3,9 @@
 	import { onMount, getContext, tick, onDestroy } from 'svelte';
 	const i18n = getContext('i18n');
 
-	import { page } from '$app/stores';
-	import { mobile, showSidebar, user } from '$lib/stores';
+ import { page } from '$app/stores';
+ import { base } from '$app/paths';
+ import { mobile, showSidebar, user } from '$lib/stores';
 	import { updateChannelById } from '$lib/apis/channels';
 
 	import Cog6 from '$lib/components/icons/Cog6.svelte';
@@ -50,7 +51,7 @@
 >
 	<a
 		class=" w-full flex justify-between"
-		href="/channels/{channel.id}"
+		href="{`${base}/channels/${channel.id}`}"
 		on:click={() => {
 			if ($mobile) {
 				showSidebar.set(false);

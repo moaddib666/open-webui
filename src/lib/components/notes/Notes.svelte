@@ -27,7 +27,8 @@
 	// Assuming $i18n.languages is an array of language codes
 	$: loadLocale($i18n.languages);
 
-	import { goto } from '$app/navigation';
+ import { goto } from '$app/navigation';
+ import { base } from '$app/paths';
 	import { onMount, getContext, onDestroy } from 'svelte';
 	import { WEBUI_NAME, config, prompts as _prompts, user } from '$lib/stores';
 
@@ -78,7 +79,7 @@
 		});
 
 		if (res) {
-			goto(`/notes/${res.id}`);
+			goto(`${base}/notes/${res.id}`);
 		}
 	};
 
@@ -308,7 +309,7 @@
 								>
 									<div class=" flex flex-1 space-x-4 cursor-pointer w-full">
 										<a
-											href={`/notes/${note.id}`}
+											href={`${base}/notes/${note.id}`}
 											class="w-full -translate-y-0.5 flex flex-col justify-between"
 										>
 											<div class="flex-1">

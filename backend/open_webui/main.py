@@ -394,6 +394,7 @@ from open_webui.config import (
 from open_webui.env import (
     AUDIT_EXCLUDED_PATHS,
     AUDIT_LOG_LEVEL,
+    SITE_BASE_PATH,
     CHANGELOG,
     REDIS_URL,
     REDIS_SENTINEL_HOSTS,
@@ -545,6 +546,7 @@ app = FastAPI(
     openapi_url="/openapi.json" if ENV == "dev" else None,
     redoc_url=None,
     lifespan=lifespan,
+    root_path=SITE_BASE_PATH,
 )
 
 oauth_manager = OAuthManager(app)
@@ -1702,6 +1704,8 @@ async def get_manifest_json():
     if app.state.EXTERNAL_PWA_MANIFEST_URL:
         return requests.get(app.state.EXTERNAL_PWA_MANIFEST_URL).json()
     else:
+        # Use SITE_BASE_PATH for static assets if it's set
+        static_prefix = f"{SITE_BASE_PATH}/static" if SITE_BASE_PATH else "/static"
         return {
             "name": app.state.WEBUI_NAME,
             "short_name": app.state.WEBUI_NAME,
@@ -1712,13 +1716,13 @@ async def get_manifest_json():
             "orientation": "any",
             "icons": [
                 {
-                    "src": "/static/logo.png",
+                    "src": f"{static_prefix}/logo.png",
                     "type": "image/png",
                     "sizes": "500x500",
                     "purpose": "any",
                 },
                 {
-                    "src": "/static/logo.png",
+                    "src": f"{static_prefix}/logo.png",
                     "type": "image/png",
                     "sizes": "500x500",
                     "purpose": "maskable",
@@ -1729,12 +1733,14 @@ async def get_manifest_json():
 
 @app.get("/opensearch.xml")
 async def get_opensearch_xml():
+    # Use SITE_BASE_PATH for static assets if it's set
+    static_prefix = f"{SITE_BASE_PATH}/static" if SITE_BASE_PATH else "/static"
     xml_content = rf"""
     <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
     <ShortName>{app.state.WEBUI_NAME}</ShortName>
     <Description>Search {app.state.WEBUI_NAME}</Description>
     <InputEncoding>UTF-8</InputEncoding>
-    <Image width="16" height="16" type="image/x-icon">{app.state.config.WEBUI_URL}/static/favicon.png</Image>
+    <Image width="16" height="16" type="image/x-icon">{app.state.config.WEBUI_URL}{static_prefix}/favicon.png</Image>
     <Url type="text/html" method="get" template="{app.state.config.WEBUI_URL}/?q={"{searchTerms}"}"/>
     <moz:SearchForm>{app.state.config.WEBUI_URL}</moz:SearchForm>
     </OpenSearchDescription>
@@ -1771,12 +1777,13 @@ async def serve_cache_file(
 
 
 def swagger_ui_html(*args, **kwargs):
+    static_prefix = f"{SITE_BASE_PATH}/static"
     return get_swagger_ui_html(
         *args,
         **kwargs,
-        swagger_js_url="/static/swagger-ui/swagger-ui-bundle.js",
-        swagger_css_url="/static/swagger-ui/swagger-ui.css",
-        swagger_favicon_url="/static/swagger-ui/favicon.png",
+        swagger_js_url=f"{static_prefix}/swagger-ui/swagger-ui-bundle.js",
+        swagger_css_url=f"{static_prefix}/swagger-ui/swagger-ui.css",
+        swagger_favicon_url=f"{static_prefix}/swagger-ui/favicon.png",
     )
 
 

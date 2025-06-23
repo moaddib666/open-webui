@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	import { socket, user } from '$lib/stores';
 
@@ -49,7 +50,7 @@
 			await tick();
 			scrollToBottom();
 		} else {
-			goto('/');
+			goto(`${base}/`);
 		}
 	};
 

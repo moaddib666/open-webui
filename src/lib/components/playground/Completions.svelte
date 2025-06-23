@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
 
-	import { goto } from '$app/navigation';
+ import { goto } from '$app/navigation';
+ import { base } from '$app/paths';
 	import { onMount, tick, getContext } from 'svelte';
 
 	import { WEBUI_BASE_URL } from '$lib/constants';
@@ -106,7 +107,7 @@
 
 	onMount(async () => {
 		if ($user?.role !== 'admin') {
-			await goto('/');
+			await goto(`${base}/`);
 		}
 
 		if ($settings?.models) {
